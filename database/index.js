@@ -159,7 +159,7 @@ module.exports.updateUserPassword = (user, password, callback) => {
       if (err) {
         callback(err, null);
       } else if (!user) {
-        callback(err, []);
+        callback(Error('User Does Not Exist'), []);
       } else {
         if (crypto.pbkdf2Sync(password.oldPassword, user.salt, 1012, 50, 'sha512').toString('hex') === user.password) {
           connection.query(`UPDATE Users SET password = '${crypto.pbkdf2Sync(password.newPassword, user.salt, 1012, 50, 'sha512').toString('hex')}' WHERE username = '${user.username}'`, (err2) => {
@@ -208,12 +208,13 @@ module.exports.updateUserPassword = (user, password, callback) => {
 };
 
 module.exports.updateUserGold = (username, amount, callback) => {
-  if (parseInt(amount) < 0) {
-
-  }
   module.exports.selectUserByUsername(username, (err, user) => {
     if (err) {
       callback(err, null);
+    } else if (!user) {
+      callback(Error('User does not exist!'), null);
+    } else if (parseInt(amount) < 0 && user.gold + parseInt(amount) < 0) {
+      callback(Error('Not enough gold'), null);
     } else {
       connection.query(`UPDATE Users SET gold = ${user.gold + parseInt(amount)} WHERE username = '${username}'`, (err2) => {
         if (err2) {
@@ -233,24 +234,32 @@ module.exports.updateUserGold = (username, amount, callback) => {
 };
 
 module.exports.updateUserImage = (username, avatar, callback) => {
-  const extensions = ['.jpg', '.png', 'jpeg', 'svg>'];
-  if(_.includes(extensions, _.slice(avatar, avatar.length - 4).join(''))) {
-    connection.query(`UPDATE Users Set avatar = '${avatar}' WHERE username = '${username}'`, (err) => {
-      if (err) {
-        callback(err, null);
-      } else {
-        module.exports.selectUserByUsername(username, (err2, updatedUser) => {
-          if (err2) {
-            callback(err2, null);
+  module.exports.selectUserByUsername(username, (err, user) => {
+    if (err) {
+      callback(err, null);
+    } else if (!user) {
+      callback(Error('User does not exist'), null);
+    } else {
+      const extensions = ['.jpg', '.png', 'jpeg', 'svg>'];
+      if (_.includes(extensions, _.slice(avatar, avatar.length - 4).join(''))) {
+        connection.query(`UPDATE Users Set avatar = '${avatar}' WHERE username = '${username}'`, (err) => {
+          if (err) {
+            callback(err, null);
           } else {
-            callback(null, filterUserInfo(updatedUser));
+            module.exports.selectUserByUsername(username, (err2, updatedUser) => {
+              if (err2) {
+                callback(err2, null);
+              } else {
+                callback(null, filterUserInfo(updatedUser));
+              }
+            });
           }
         });
+      } else {
+        callback(Error('Invalid image file/link'), null);
       }
-    });
-  } else {
-    callback(Error('Invalid image file/link'), null);
-  }
+    }
+  });
 };
 
 module.exports.verifyUserPassword = (username, password, callback) => {
@@ -651,7 +660,7 @@ module.exports.updateRiddleViews = (username, id_riddle, callback) => {
             }
           }
         }
-      }); 
+      });
     }
   });
 };
