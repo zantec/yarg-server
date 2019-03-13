@@ -1,0 +1,47 @@
+{
+  "name": "quarterpirates",
+  "version": "1.0.0",
+  "description": "The Pirate Game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zantec/QuarterPirates.git"
+  },
+  "keywords": [
+    "Pirates"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zantec/QuarterPirates/issues"
+  },
+  "homepage": "https://github.com/zantec/QuarterPirates#readme",
+  "dependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@dicebear/avatars": "^3.0.6",
+    "@dicebear/avatars-jdenticon-sprites": "^1.0.3",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jdenticon": "^2.1.1",
+    "lodash": "^4.17.11",
+    "mysql": "^2.16.0",
+    "path": "^0.12.7",
+    "react": "16.6.1",
+    "react-native": "0.57.7",
+    "react-viro": "2.13.0"
+  },
+  "devDependencies": {
+    "babel-jest": "^24.4.0",
+    "jest": "24.4.0",
+    "metro-react-native-babel-preset": "0.53.0",
+    "react-test-renderer": "16.6.1"
+  },
+  "jest": {}
+}
