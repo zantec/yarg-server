@@ -28,6 +28,16 @@ app.get('/health', (req, res) => {
   res.send('UP!');
 });
 
+app.get('user', (req, res) => {
+  db.selectFilteredUserInfoByUsername(req.query.username, (err, user) => {
+    if (err) {
+      res.status(500).send('UNABLE TO RETRIEVE USER');
+    } else {
+      res.status(200).send(user);
+    }
+  });
+})
+
 /**
  * Log-In User
  * @requires req.body.username - a username

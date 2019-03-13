@@ -3,7 +3,7 @@ const axios = require('axios');
 test('health endpoint', (done) => {
   axios({
     method: 'GET',
-    url: '/health',
+    url: '/',
   })
     .then((success) => {
       expect(success).toBe('UP!');
