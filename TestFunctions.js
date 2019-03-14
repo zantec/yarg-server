@@ -114,6 +114,6 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-db.selectRiddlesByCity('New Orleans', (err, res) => {
-  console.log(err, res);
-});
+// db.selectRiddlesByCity('New Orleans', (err, res) => {
+//   console.log(err, res);
+// });

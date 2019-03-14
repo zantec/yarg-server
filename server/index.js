@@ -181,6 +181,16 @@ app.post('/user/inventory', (req, res) => {
   }
 });
 
+app.get('/treasures/city', (req, res) => {
+  db.selectTreasuresByCity(req.query.city, (err, treasures) => {
+    if (err) {
+      res.status(500).send('UNABLE TO GET TREASURES');
+    } else {
+      res.status(200).send(treasures);
+    }
+  });
+});
+
 app.patch('/treasure', (req, res) => {  
   db.updateTreasureDateClaimed(req.body.id_treasure, (err, treasure) => {
     if (err) {
