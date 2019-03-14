@@ -121,7 +121,7 @@ app.get('/user/riddles', (req, res) => {
   });
 });
 
-app.put('/user/riddles', (req, res) => {
+app.post('/user/riddles', (req, res) => {
   db.insertRiddle(req.body.title, req.body.latitude, req.body.longitude, req.body.address, req.body.city, req.body.state, req.body.zipcode, req.body.riddle, req.body.id_treasure, req.body.id_user, (err, riddle) => {
     if (err) {
       res.status(500).send('UNABLE TO ADD RIDDLE');
@@ -138,6 +138,22 @@ app.get('/user/treasures', (req, res) => {
     } else {
       res.status(200).send(treasures);
     }
+  });
+});
+
+app.post('/user/treasures', (req, res) => {
+  db.insertTreasure(req.body.gold_value, req.body.longitude, req.body.latitude, req.body.address, req.body.city, req.body.state, req.body.zipcode, req.body.id_user, (err, treasure) => {
+    if (err) {
+      res.status(500).send('UNABLE TO ADD TREASURE');
+    } else {
+      res.status(202).send(treasure);
+    }
+  });
+});
+
+app.delete('/user/treasure', (req, res) => {
+  db.deleteTreasure(req.body.id_user, req.body.id_treasure, (err) => {
+
   });
 });
 
