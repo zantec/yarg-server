@@ -109,3 +109,7 @@ const axios = require('axios').default;
 // db.deleteTreasure(1, 2, (err, res) => {
 
 // });
+
+db.selectTreasuresByCity('New Orleans', (err, res) => {
+  console.log(err, res);
+});

@@ -462,6 +462,17 @@ module.exports.selectTreasuresByCity = (city, callback) => {
       callback(err, null);
     } else {
       const returnTreasures = [];
+      module.exports.selectLocationsByCity(city, (err2, locations) => {
+        if (err2) {
+          callback(err2, null);
+        } else {
+          _.forEach(_.filter(treasures, treasure => _.includes(_.map(_.filter(locations, location => location.city === city), location => location.id), treasure.id_location)), (treasure) => {
+            treasure.location_data = _.find(locations, location => location.id === treasure.id_location);
+            returnTreasures.push(treasure);
+          });
+          callback(null, returnTreasures);
+        }
+      });
     }
   });
 };
