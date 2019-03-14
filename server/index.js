@@ -181,6 +181,16 @@ app.post('/user/inventory', (req, res) => {
   }
 });
 
+app.get('/riddles/city', (req, res) => {
+  db.selectRiddlesByCity(req.query.city, (err, riddles) => {
+    if (err) {
+      res.status(500).send('UNABLE TO GET RIDDLES');
+    } else {
+      res.status(200).send(riddles);
+    }
+  });
+});
+
 app.get('/treasures/city', (req, res) => {
   db.selectTreasuresByCity(req.query.city, (err, treasures) => {
     if (err) {
