@@ -1,5 +1,6 @@
 const server = require('./server/index');
 const db = require('./database/index');
+const axios = require('axios').default;
 
 // db.selectAllUsers((err, res) => {
 //   console.log(err, res);

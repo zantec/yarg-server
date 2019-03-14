@@ -28,6 +28,16 @@ app.get('/health', (req, res) => {
   res.send('UP!');
 });
 
+app.get('user', (req, res) => {
+  db.selectFilteredUserInfoByUsername(req.query.username, (err, user) => {
+    if (err) {
+      res.status(500).send('UNABLE TO RETRIEVE USER');
+    } else {
+      res.status(200).send(user);
+    }
+  });
+})
+
 /**
  * Log-In User
  * @requires req.body.username - a username
@@ -66,6 +76,16 @@ app.post('/signup', (req, res) => {
   }
 });
 
+app.patch('/user/password', (req, res) => {
+  db.updateUserPassword(req.body.user, req.body.password, (err, user) => {
+    if (err) {
+      res.status(500).send('Unable to update password');
+    } else {
+      res.status(202).send(user);
+    }
+  });
+});
+
 app.patch('/user/gold', (req, res) => {
   db.updateUserGold(req.body.username, req.body.ammount, (err, user) => {
     if (err) {
@@ -76,6 +96,16 @@ app.patch('/user/gold', (req, res) => {
           console.log('Transaction Complete!');
         }
       });
+      res.status(202).send(user);
+    }
+  });
+});
+
+app.patch('/user/avatar', (req, res) => {
+  db.updateUserImage(req.body.username, req.body.avatar, (err, user) => {
+    if (err) {
+      res.status(500).send('UNABLE TO UPDATE USER AVATAR');
+    } else {
       res.status(202).send(user);
     }
   });
