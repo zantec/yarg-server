@@ -28,7 +28,7 @@ app.get('/health', (req, res) => {
   res.send('UP!');
 });
 
-app.get('user', (req, res) => {
+app.get('/user', (req, res) => {
   db.selectFilteredUserInfoByUsername(req.query.username, (err, user) => {
     if (err) {
       res.status(500).send('UNABLE TO RETRIEVE USER');
@@ -36,7 +36,7 @@ app.get('user', (req, res) => {
       res.status(200).send(user);
     }
   });
-})
+});
 
 /**
  * Log-In User
@@ -52,7 +52,7 @@ app.get('/login', (req, res) => {
       if (err) {
         res.status(500).send('COULD NOT LOG IN USER');
       } else {
-        res.status(202).send(user);
+        res.status(200).send(user);
       }
     });
   }
@@ -107,6 +107,26 @@ app.patch('/user/avatar', (req, res) => {
       res.status(500).send('UNABLE TO UPDATE USER AVATAR');
     } else {
       res.status(202).send(user);
+    }
+  });
+});
+
+app.get('/user/riddles', (req, res) => {
+  db.selectRiddlesByUsername(req.query.username, (err, riddles) => {
+    if (err) {
+      res.status(500).send('UNABLE TO RETRIEVE RIDDLES');
+    } else {
+      res.status(200).send(riddles);
+    }
+  });
+});
+
+app.get('/user/treasures', (req, res) => {
+  db.selectTreasuresByUsername(req.query.username, (err, treasures) => {
+    if (err) {
+      res.status(500).send('UNABLE TO RETRIEVE USER TREASURES');
+    } else {
+      res.status(202).send(treasures);
     }
   });
 });

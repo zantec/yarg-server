@@ -953,5 +953,4 @@ module.exports.insertUserInventoryRiddle = (id_user, id_riddle, callback) => {
   });
 };
 
-// END OF USERINVENTORY RELATIV HELPER FUNCTIONS //
-
+// END OF USERINVENTORY RELATIVE HELPER FUNCTIONS //
