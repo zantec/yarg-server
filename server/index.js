@@ -171,6 +171,16 @@ app.delete('/user/treasure', (req, res) => {
   });
 });
 
+app.patch('/treasure', (req, res) => {
+  db.updateTreasureDateClaimed(req.body.id_treasure, (err, treasure) => {
+    if (err) {
+      res.status(500).send('UNABLE TO UPDATE TRASURE CLAIMED DATE');
+    } else {
+      res.send(202, treasure);
+    }
+  });
+});
+
 // Able to set port and still work //
 const port = process.env.PORT || 3001;
 
