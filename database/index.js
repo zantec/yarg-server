@@ -647,6 +647,27 @@ module.exports.selectRiddlesByUsername = (username, callback) => {
   });
 };
 
+module.exports.selectRiddlesByCity = (city, callback) => {
+  module.exports.selectAllRiddles((err, riddles) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      module.exports.selectLocationsByCity(city, (err2, locations) => {
+        if (err2) {
+          callback(err2, null);
+        } else {
+          const locationIds = _.map(locations, location => location.id);
+          const returnRiddles = _.map(_.filter(riddles, riddle => _.includes(locationIds, riddle.id_location)), (riddle) => {
+            riddle.location_data = _.find(locations, location => location.id === riddle.id_location);
+            return riddle;
+          });
+          callback(null, returnRiddles);
+        }
+      });
+    }
+  });
+};
+
 module.exports.updateRiddleViews = (username, id_riddle, callback) => {
   module.exports.selectUserByUsername(username, (err, user) => {
     if (err) {
