@@ -121,12 +121,22 @@ app.get('/user/riddles', (req, res) => {
   });
 });
 
+app.put('/user/riddles', (req, res) => {
+  db.insertRiddle(req.body.title, req.body.latitude, req.body.longitude, req.body.address, req.body.city, req.body.state, req.body.zipcode, req.body.riddle, req.body.id_treasure, req.body.id_user, (err, riddle) => {
+    if (err) {
+      res.status(500).send('UNABLE TO ADD RIDDLE');
+    } else {
+      res.status(202).send(riddle);
+    }
+  });
+});
+
 app.get('/user/treasures', (req, res) => {
   db.selectTreasuresByUsername(req.query.username, (err, treasures) => {
     if (err) {
       res.status(500).send('UNABLE TO RETRIEVE USER TREASURES');
     } else {
-      res.status(202).send(treasures);
+      res.status(200).send(treasures);
     }
   });
 });

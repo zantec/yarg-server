@@ -373,17 +373,24 @@ module.exports.selectTreasuresByUsername = (username, callback) => {
         } else if (pairs.length !== 0) {
           const treasureIds = _.map(pairs, pair => pair.id_treasure);
           const UserTreasures = [];
-          _.forEach(treasureIds, (id, index) => {
-            module.exports.selectTreasureById(id, (err3, treasure) => {
-              if (err3) {
-                callback(err3, null);
-              } else {
-                UserTreasures.push(treasure);
-                if (index === treasureIds.length - 1) {
-                  callback(null, UserTreasures);
-                }
-              }
-            });
+          module.exports.selectLocationsByCategory('treasure', (err4, locations) => {
+            if (err4) {
+              callback(err4, null);
+            } else {
+              _.forEach(treasureIds, (id, index) => {
+                module.exports.selectTreasureById(id, (err3, treasure) => {
+                  if (err3) {
+                    callback(err3, null);
+                  } else {
+                    treasure.id_location = _.filter(locations, location => location.id === treasure.id_location)[0];
+                    UserTreasures.push(treasure);
+                    if (index === treasureIds.length - 1) {
+                      callback(null, UserTreasures);
+                    }
+                  }
+                });
+              });
+            }
           });
         } else {
           callback(null, []);
@@ -570,17 +577,24 @@ module.exports.selectRiddlesByUsername = (username, callback) => {
           const riddles = [];
           const ids = _.map(pairs, pair => pair.id_riddle);
           if (ids.length !== 0) {
-            _.forEach(ids, (id, index) => {
-              module.exports.selectRiddleById(id, (err3, riddle) => {
-                if (err3) {
-                  callback(err3, null);
-                } else {
-                  riddles.push(riddle);
-                  if (index === ids.length - 1) {
-                    callback(null, riddles);
-                  }
-                }
-              })
+            module.exports.selectLocationsByCategory('riddle', (err4, locations) => {
+              if (err4) {
+                callback(err4, null);
+              } else {
+                _.forEach(ids, (id, index) => {
+                  module.exports.selectRiddleById(id, (err3, riddle) => {
+                    if (err3) {
+                      callback(err3, null);
+                    } else {
+                      riddle.location_data = _.filter(locations, location => location.id === riddle.id_location)[0];
+                      riddles.push(riddle);
+                      if (index === ids.length - 1) {
+                        callback(null, riddles);
+                      }
+                    }
+                  })
+                });
+              }
             });
           } else {
             callback(null, riddles);
