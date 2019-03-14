@@ -171,7 +171,7 @@ app.delete('/user/treasure', (req, res) => {
   });
 });
 
-app.patch('/treasure', (req, res) => {
+app.patch('/treasure', (req, res) => {  
   db.updateTreasureDateClaimed(req.body.id_treasure, (err, treasure) => {
     if (err) {
       res.status(500).send('UNABLE TO UPDATE TRASURE CLAIMED DATE');
