@@ -696,7 +696,7 @@ module.exports.selectRiddleById = (id_riddle, callback) => {
   });
 };
 
-module.exports.deleteRiddle = (id_riddle, callback) => {
+module.exports.deleteRiddle = (id_user, id_riddle, callback) => {
   module.exports.selectRiddleById(parseInt(id_riddle), (err, riddle) => {
     if (err) {
       callback(err, null);
@@ -707,6 +707,19 @@ module.exports.deleteRiddle = (id_riddle, callback) => {
       connection.query(`DELETE FROM UserInventory WHERE id = ${id_riddle}`);
       connection.query(`DELETE FROM Locations WHERE id = ${riddle.id_location}`);
       connection.query(`DELETE FROM Riddles WHERE id = ${id_riddle}`);
+      module.exports.selectUserById(id_user, (err2, user) => {
+        if (err2) {
+          callback(err2, null);
+        } else {
+          module.exports.selectFilteredUserInfoByUsername(user.username, (err3, filteredUser) => {
+            if (err3) {
+              callback(err3, null);
+            } else {
+              callback(err3, filteredUser.riddles);
+            }
+          });
+        }
+      });
     }
   });
 };

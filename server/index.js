@@ -131,6 +131,16 @@ app.post('/user/riddles', (req, res) => {
   });
 });
 
+app.delete('/user/riddle', (req, res) => {
+  db.deleteRiddle(req.body.id_user, req.body.id_riddle, (err, riddles) => {
+    if (err) {
+      res.status(500).send('ERROR OCCURRED WHILE DELETING RIDDLE');
+    } else {
+      res.status(202).send(riddles);
+    }
+  });
+});
+
 app.get('/user/treasures', (req, res) => {
   db.selectTreasuresByUsername(req.query.username, (err, treasures) => {
     if (err) {
