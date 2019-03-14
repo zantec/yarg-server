@@ -152,8 +152,12 @@ app.post('/user/treasures', (req, res) => {
 });
 
 app.delete('/user/treasure', (req, res) => {
-  db.deleteTreasure(req.body.id_user, req.body.id_treasure, (err) => {
-
+  db.deleteTreasure(req.body.id_user, req.body.id_treasure, (err, treasures) => {
+    if (err) {
+      res.status(500).send('UNABLE TO DELETE TREASURE');
+    } else {
+      res.status(202).send(treasures);
+    }
   });
 });
 

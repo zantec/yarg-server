@@ -459,11 +459,11 @@ module.exports.updateTreasureDateClaimed = (id_treasure, callback) => {
 };
 
 module.exports.deleteTreasure = (id_user, id_treasure, callback) => {
-  module.exports.selectTreasureById(id_treasure, (err, treasure) => {
+  module.exports.selectTreasureById(parseInt(id_treasure), (err, treasure) => {
     if (!treasure) {
       callback(Error("treasure doesn't exist"), null);
     } else {
-      module.exports.selectUserById(id_user, (err, user) => {
+      module.exports.selectUserById(parseInt(id_user), (err, user) => {
         if (err) {
           callback(err, null);
         } else {
@@ -471,13 +471,20 @@ module.exports.deleteTreasure = (id_user, id_treasure, callback) => {
             if (err2) {
               callback(err2, null);
             } else {
-              const treasureRiddleId = _.map(_.filter(riddles, riddles => riddles.id_treasure === id_treasure), riddle => riddle.id_treasure);
+              const treasureRiddleId = _.map(_.filter(riddles, riddles => riddles.id_treasure === parseInt(id_treasure)), riddle => riddle.id_treasure);
               _.forEach(treasureRiddleId, (id) => {
                 module.exports.deleteRiddle(id, () => { console.log('error'); });
               });
-              connection.query(`DELETE FROM UserTreasures WHERE id_treasure = ${id_treasure}`);
+              connection.query(`DELETE FROM UserTreasures WHERE id_treasure = ${parseInt(id_treasure)}`);
               connection.query(`DELETE FROM Locations WHERE id = ${treasure.id_location}`);
-              connection.query(`DELETE FROM Treasures WHERE id = ${id_treasure}`);
+              connection.query(`DELETE FROM Treasures WHERE id = ${parseInt(id_treasure)}`);
+              module.exports.selectTreasuresByUsername(user.username, (err3, treasures) => {
+                if (err3) {
+                  callback(err3, null);
+                } else {
+                  callback(null, treasures);
+                }
+              });
             }
           });
         }
