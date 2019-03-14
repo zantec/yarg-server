@@ -171,6 +171,16 @@ app.delete('/user/treasure', (req, res) => {
   });
 });
 
+app.post('/user/inventory', (req, res) => {
+  if (req.body.id_item) {
+    db.insertUserInventoryItem()
+  } else if (req.body.id_) {
+
+  } else {
+    res.status(500).send('INVALID INPUT');
+  }
+});
+
 app.patch('/treasure', (req, res) => {  
   db.updateTreasureDateClaimed(req.body.id_treasure, (err, treasure) => {
     if (err) {

@@ -70,7 +70,14 @@ module.exports.selectFilteredUserInfoByUsername = (username, callback) => {
               callback(err3, null);
             } else {
               fileredUser.riddles = riddles;
-              callback(null, fileredUser);
+              module.exports.selectUserInventoryByUsername(fileredUser.username, (err4, inventory) => {
+                if (err4) {
+                  callback(err4, null);
+                } else {
+                  fileredUser.inventory = inventory;
+                  callback(null, fileredUser);
+                }
+              });
             }
           });
         }
@@ -281,7 +288,14 @@ module.exports.verifyUserPassword = (username, password, callback) => {
                 callback(err3, null);
               } else {
                 fileredUser.riddles = riddles;
-                callback(null, fileredUser);
+                module.exports.selectUserInventoryByUsername(fileredUser.username, (err4, inventory) => {
+                  if (err4) {
+                    callback(err4, null);
+                  } else {
+                    fileredUser.inventory = inventory;
+                    callback(null, fileredUser);
+                  }
+                });
               }
             });
           }
@@ -438,6 +452,16 @@ module.exports.selectTreasuresByZipcode = (zipcode, callback) => {
           }
         });
       });
+    }
+  });
+};
+
+module.exports.selectTreasuresByCity = (city, callback) => {
+  module.exports.selectAllTreasure((err, treasures) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      const returnTreasures = [];
     }
   });
 };
@@ -789,6 +813,16 @@ module.exports.selectAllLocations = (callback) => {
 
 module.exports.selectLocationsByCategory = (category, callback) => {
   connection.query(`SELECT * FROM Locations WHERE category = '${category}'`, (err, locations) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, locations);
+    }
+  });
+};
+
+module.exports.selectLocationsByCity = (city, callback) => {
+  connection.query(`SELECT * FROM Locations WHERE city = '${city}'`, (err, locations) => {
     if (err) {
       callback(err, null);
     } else {
