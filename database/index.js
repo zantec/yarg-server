@@ -146,7 +146,7 @@ module.exports.selectUserByUsername = (username, callback) => {
 };
 
 module.exports.selectUserById = (id_user, callback) => {
-  connection.query(`SELECT * FROM Users WHERE id = ${id_user}`, (err, singleUserArray) => {
+  connection.query(`SELECT * FROM Users WHERE id = ${parseInt(id_user)}`, (err, singleUserArray) => {
     if (err) {
       callback(err, null);
     } else {
@@ -1010,18 +1010,28 @@ module.exports.insertUserInventoryItem = (id_user, id_item, callback) => {
     } else if (!user) {
       callback(Error('User does not exist!'), null);
     } else {
-      const q = [parseInt(id_user), parseInt(id_item)];
-      connection.query("INSERT INTO UserInventory (category, id_user, id_item) VALUES ('item', ?, ?)", q, (err2) => {
-        if (err2) {
-          callback(err2, null);
+      module.exports.selectUserInventoryByUsername(user.username, (err4, inventory) => {
+        if (err4) {
+          callback(err4, null);
         } else {
-          module.exports.selectUserInventoryByUsername(user.username, (err3, inventory) => {
-            if (err3) {
-              callback(err3, null);
-            } else {
-              callback(null, inventory.items[inventory.items.length - 1]);
-            }
-          });
+          if (!_.includes(_.map(inventory.items, item => item.id), parseInt(id_item))) {
+            const q = [parseInt(id_user), parseInt(id_item)];
+            connection.query("INSERT INTO UserInventory (category, id_user, id_item) VALUES ('item', ?, ?)", q, (err2) => {
+              if (err2) {
+                callback(err2, null);
+              } else {
+                module.exports.selectUserInventoryByUsername(user.username, (err3, inventory) => {
+                  if (err3) {
+                    callback(err3, null);
+                  } else {
+                    callback(null, inventory.items);
+                  }
+                });
+              }
+            });
+          } else {
+            callback(Error('USER ALREADY HAS ITEM'), _.find(inventory.items, item => item.id === id_item));
+          }
         }
       });
     }
@@ -1036,15 +1046,32 @@ module.exports.insertUserInventoryRiddle = (id_user, id_riddle, callback) => {
       callback(Error('User does not exist!'), null);
     } else {
       const q = [parseInt(id_user), parseInt(id_riddle)];
-      connection.query("INSERT INTO UserInventory (category, id_user, id_riddle) VALUES ('riddle', ?, ?)", q, (err2) => {
-        if (err2) {
-          callback(err2, null);
+      module.exports.selectRiddlesByUsername(user.username, (err4, riddles) => {
+        if (err4) {
+          callback(err4, null);
         } else {
-          module.exports.selectUserInventoryByUsername(user.username, (err3, inventory) => {
-            if (err3) {
-              callback(err3, null);
+          module.exports.selectUserInventoryByUsername(user.username, (err5, inventory) => {
+            if (err5) {
+              callback(err5, null);
             } else {
-              callback(null, inventory.riddles[inventory.riddles.length - 1]);
+              const parsedIdRiddle = parseInt(id_riddle);
+              if (!_.includes(_.map(riddles, riddle => riddle.id), parsedIdRiddle) && !_.includes(_.map(inventory.riddles, riddle => riddle.id), parsedIdRiddle)) {
+                connection.query("INSERT INTO UserInventory (category, id_user, id_riddle) VALUES ('riddle', ?, ?)", q, (err2) => {
+                  if (err2) {
+                    callback(err2, null);
+                  } else {
+                    module.exports.selectUserInventoryByUsername(user.username, (err3, updatedInventory) => {
+                      if (err3) {
+                        callback(err3, null);
+                      } else {
+                        callback(null, updatedInventory.riddles);
+                      }
+                    });
+                  }
+                });
+              } else {
+                callback(Error('RIDDLE ALREADY IN INVENTORY'), null);
+              }
             }
           });
         }

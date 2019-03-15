@@ -173,9 +173,21 @@ app.delete('/user/treasure', (req, res) => {
 
 app.post('/user/inventory', (req, res) => {
   if (req.body.id_item) {
-    db.insertUserInventoryItem()
-  } else if (req.body.id_) {
-
+    db.insertUserInventoryItem(req.body.id_user, req.body.id_item, (err, items) => {
+      if (err) {
+        res.send(500, 'UNABLE TO ADD ITEM TO INVENTORY');
+      } else {
+        res.send(202, items);
+      }
+    });
+  } else if (req.body.id_riddle) {
+    db.insertUserInventoryRiddle(req.body.id_user, req.body.id_riddle, (err, riddles) => {
+      if (err) {
+        res.send(500, 'UNABLE TO ADD RIDDLE TO INVENTORY');
+      } else {
+        res.send(202, riddles)
+      }
+    });
   } else {
     res.status(500).send('INVALID INPUT');
   }
@@ -201,7 +213,7 @@ app.get('/treasures/city', (req, res) => {
   });
 });
 
-app.patch('/treasure', (req, res) => {  
+app.patch('/treasure/date', (req, res) => {  
   db.updateTreasureDateClaimed(req.body.id_treasure, (err, treasure) => {
     if (err) {
       res.status(500).send('UNABLE TO UPDATE TRASURE CLAIMED DATE');
@@ -210,6 +222,7 @@ app.patch('/treasure', (req, res) => {
     }
   });
 });
+
 
 // Able to set port and still work //
 const port = process.env.PORT || 3001;
