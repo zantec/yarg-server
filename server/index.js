@@ -243,6 +243,10 @@ app.patch('/treasure/date', (req, res) => {
   });
 });
 
+app.patch('/treasure/gold', (req, res) => {
+  
+});
+
 // Able to set port and still work //
 const port = process.env.PORT || 3001;
 

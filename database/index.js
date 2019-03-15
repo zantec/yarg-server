@@ -493,6 +493,30 @@ module.exports.updateTreasureDateClaimed = (id_treasure, callback) => {
   });
 };
 
+module.exports.updateTreasureGold = (id_treasure, gold_value, callback) => {
+  module.exports.selectTreasureById(id_treasure, (err, treasure) => {
+    if (err) {
+      callback(err, null);
+    } else if (!treasure) {
+      callback(Error('TREASURE DOES NOT EXIST'), null);
+    } else {
+      connection.query(`UPDATE Treasures SET gold_value = ${treasure.gold_value + parseInt(gold_value)} WHERE id = ${id_treasure}`, (err2) => {
+        if (err) {
+          callback(err2, null);
+        } else {
+          module.exports.selectTreasureById(id_treasure, (err3, updatedTreasure) => {
+            if (err3) {
+              callback(err3, null);
+            } else {
+              callback(null, updatedTreasure);
+            }
+          });
+        }
+      });
+    }
+  });
+};
+
 module.exports.deleteTreasure = (id_user, id_treasure, callback) => {
   module.exports.selectTreasureById(parseInt(id_treasure), (err, treasure) => {
     if (!treasure) {
@@ -861,6 +885,10 @@ module.exports.selectLocationsByCity = (city, callback) => {
       callback(null, locations);
     }
   });
+};
+
+module.exports.selectLocationById = (id_location, callback) => {
+
 };
 
 module.exports.insertLocation = (category, longitude, latitude, address, city, state, zipcode, callback) => {
