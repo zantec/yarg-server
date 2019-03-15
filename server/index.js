@@ -171,6 +171,16 @@ app.delete('/user/treasure', (req, res) => {
   });
 });
 
+app.get('/user/inventory', (req, res) => {
+  db.selectUserInventoryByUsername(req.query.username, (err, inventory) => {
+    if (err) {
+      res.send(500, 'UNABLE TO GET USER INVENTORY');
+    } else {
+      res.send(200, inventory);
+    }
+  });
+});
+
 app.post('/user/inventory', (req, res) => {
   if (req.body.id_item) {
     db.insertUserInventoryItem(req.body.id_user, req.body.id_item, (err, items) => {
@@ -199,6 +209,16 @@ app.get('/riddles/city', (req, res) => {
       res.status(500).send('UNABLE TO GET RIDDLES');
     } else {
       res.status(200).send(riddles);
+    }
+  });
+});
+
+app.patch('/riddle/views', (req, res) => {
+  db.updateRiddleViews(req.body.username, req.body.id_riddle, (err, riddle) => {
+    if (err) {
+      res.send(500, "UNABLE TO UPDATE THE RIDDLE'S VIEWS")
+    } else {
+      res.send(202, riddle);
     }
   });
 });

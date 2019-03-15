@@ -707,7 +707,7 @@ module.exports.updateRiddleViews = (username, id_riddle, callback) => {
             });
           } else {
             if (_.includes(_.map(pairs, pair => pair.id_riddle), parseInt(id_riddle))) {
-              callback(null, []);
+              callback(Error('USER HAS ALREADY SEEN THIS RIDDLE'), []);
             } else {
               module.exports.selectRiddleById(parseInt(id_riddle), (err, riddle) => {
                 if (err) {
