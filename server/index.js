@@ -28,7 +28,7 @@ app.get('/health', (req, res) => {
   res.send('UP!');
 });
 
-app.get('user', (req, res) => {
+app.get('/user', (req, res) => {
   db.selectFilteredUserInfoByUsername(req.query.username, (err, user) => {
     if (err) {
       res.status(500).send('UNABLE TO RETRIEVE USER');
@@ -36,7 +36,7 @@ app.get('user', (req, res) => {
       res.status(200).send(user);
     }
   });
-})
+});
 
 /**
  * Log-In User
@@ -52,7 +52,7 @@ app.get('/login', (req, res) => {
       if (err) {
         res.status(500).send('COULD NOT LOG IN USER');
       } else {
-        res.status(202).send(user);
+        res.status(200).send(user);
       }
     });
   }
@@ -107,6 +107,106 @@ app.patch('/user/avatar', (req, res) => {
       res.status(500).send('UNABLE TO UPDATE USER AVATAR');
     } else {
       res.status(202).send(user);
+    }
+  });
+});
+
+app.get('/user/riddles', (req, res) => {
+  db.selectRiddlesByUsername(req.query.username, (err, riddles) => {
+    if (err) {
+      res.status(500).send('UNABLE TO RETRIEVE RIDDLES');
+    } else {
+      res.status(200).send(riddles);
+    }
+  });
+});
+
+app.post('/user/riddles', (req, res) => {
+  db.insertRiddle(req.body.title, req.body.latitude, req.body.longitude, req.body.address, req.body.city, req.body.state, req.body.zipcode, req.body.riddle, req.body.id_treasure, req.body.id_user, (err, riddle) => {
+    if (err) {
+      res.status(500).send('UNABLE TO ADD RIDDLE');
+    } else {
+      res.status(202).send(riddle);
+    }
+  });
+});
+
+app.delete('/user/riddle', (req, res) => {
+  db.deleteRiddle(req.body.id_user, req.body.id_riddle, (err, riddles) => {
+    if (err) {
+      res.status(500).send('ERROR OCCURRED WHILE DELETING RIDDLE');
+    } else {
+      res.status(202).send(riddles);
+    }
+  });
+});
+
+app.get('/user/treasures', (req, res) => {
+  db.selectTreasuresByUsername(req.query.username, (err, treasures) => {
+    if (err) {
+      res.status(500).send('UNABLE TO RETRIEVE USER TREASURES');
+    } else {
+      res.status(200).send(treasures);
+    }
+  });
+});
+
+app.post('/user/treasures', (req, res) => {
+  db.insertTreasure(req.body.gold_value, req.body.longitude, req.body.latitude, req.body.address, req.body.city, req.body.state, req.body.zipcode, req.body.id_user, (err, treasure) => {
+    if (err) {
+      res.status(500).send('UNABLE TO ADD TREASURE');
+    } else {
+      res.status(202).send(treasure);
+    }
+  });
+});
+
+app.delete('/user/treasure', (req, res) => {
+  db.deleteTreasure(req.body.id_user, req.body.id_treasure, (err, treasures) => {
+    if (err) {
+      res.status(500).send('UNABLE TO DELETE TREASURE');
+    } else {
+      res.status(202).send(treasures);
+    }
+  });
+});
+
+app.post('/user/inventory', (req, res) => {
+  if (req.body.id_item) {
+    db.insertUserInventoryItem()
+  } else if (req.body.id_) {
+
+  } else {
+    res.status(500).send('INVALID INPUT');
+  }
+});
+
+app.get('/riddles/city', (req, res) => {
+  db.selectRiddlesByCity(req.query.city, (err, riddles) => {
+    if (err) {
+      res.status(500).send('UNABLE TO GET RIDDLES');
+    } else {
+      res.status(200).send(riddles);
+    }
+  });
+});
+
+app.get('/treasures/city', (req, res) => {
+  db.selectTreasuresByCity(req.query.city, (err, treasures) => {
+    if (err) {
+      res.status(500).send('UNABLE TO GET TREASURES');
+    } else {
+      res.status(200).send(treasures);
+    }
+  });
+});
+
+app.patch('/treasure', (req, res) => {  
+  db.updateTreasureDateClaimed(req.body.id_treasure, (err, treasure) => {
+    if (err) {
+      res.status(500).send('UNABLE TO UPDATE TRASURE CLAIMED DATE');
+    } else {
+      res.send(202, treasure);
     }
   });
 });
