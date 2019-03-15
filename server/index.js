@@ -171,6 +171,16 @@ app.delete('/user/treasure', (req, res) => {
   });
 });
 
+app.get('/user/inventory', (req, res) => {
+  db.selectUserInventoryByUsername(req.query.username, (err, inventory) => {
+    if (err) {
+      res.send(500, 'UNABLE TO GET USER INVENTORY');
+    } else {
+      res.send(200, inventory);
+    }
+  });
+});
+
 app.post('/user/inventory', (req, res) => {
   if (req.body.id_item) {
     db.insertUserInventoryItem(req.body.id_user, req.body.id_item, (err, items) => {
@@ -203,6 +213,16 @@ app.get('/riddles/city', (req, res) => {
   });
 });
 
+app.patch('/riddle/views', (req, res) => {
+  db.updateRiddleViews(req.body.username, req.body.id_riddle, (err, riddle) => {
+    if (err) {
+      res.send(500, "UNABLE TO UPDATE THE RIDDLE'S VIEWS")
+    } else {
+      res.send(202, riddle);
+    }
+  });
+});
+
 app.get('/treasures/city', (req, res) => {
   db.selectTreasuresByCity(req.query.city, (err, treasures) => {
     if (err) {
@@ -223,6 +243,15 @@ app.patch('/treasure/date', (req, res) => {
   });
 });
 
+app.patch('/treasure/gold', (req, res) => {
+  db.updateTreasureGold(req.body.id_treasure, req.body.gold_value, (err, treasure) => {
+    if (err) {
+      res.send(500, 'UNABLE TO UPDATE TREASURE GOLD VALUES');
+    } else {
+      res.send(202, treasure);
+    }
+  });
+});
 
 // Able to set port and still work //
 const port = process.env.PORT || 3001;
@@ -231,3 +260,5 @@ const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`listening on port ${port}!`);
 });
+
+module.exports = app;
