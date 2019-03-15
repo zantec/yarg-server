@@ -419,6 +419,7 @@ module.exports.selectTreasureById = (id_treasure, callback) => {
     if (err) {
       callback(err, null);
     } else {
+      
       callback(null, singleTreasureArray[0]);
     }
   });
@@ -888,7 +889,13 @@ module.exports.selectLocationsByCity = (city, callback) => {
 };
 
 module.exports.selectLocationById = (id_location, callback) => {
-
+  connection.query(`SELECT * FROM Locaions WHERE id = ${id_location}`, (err, singleLocationArray) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, singleLocationArray[0]);
+    }
+  });
 };
 
 module.exports.insertLocation = (category, longitude, latitude, address, city, state, zipcode, callback) => {
