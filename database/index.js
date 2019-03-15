@@ -419,8 +419,15 @@ module.exports.selectTreasureById = (id_treasure, callback) => {
     if (err) {
       callback(err, null);
     } else {
-      
-      callback(null, singleTreasureArray[0]);
+      module.exports.selectLocationById(singleTreasureArray[0].id_location, (err2, location) => {
+        if (err2) {
+          callback(err2, null);
+        } else {
+          const treasure = singleTreasureArray[0];
+          treasure.location_data = location
+          callback(null, treasure);
+        }
+      });
     }
   });
 };
@@ -501,19 +508,23 @@ module.exports.updateTreasureGold = (id_treasure, gold_value, callback) => {
     } else if (!treasure) {
       callback(Error('TREASURE DOES NOT EXIST'), null);
     } else {
-      connection.query(`UPDATE Treasures SET gold_value = ${treasure.gold_value + parseInt(gold_value)} WHERE id = ${id_treasure}`, (err2) => {
-        if (err) {
-          callback(err2, null);
-        } else {
-          module.exports.selectTreasureById(id_treasure, (err3, updatedTreasure) => {
-            if (err3) {
-              callback(err3, null);
-            } else {
-              callback(null, updatedTreasure);
-            }
-          });
-        }
-      });
+      if (treasure.gold_value + parseInt(gold_value) < 0) {
+        callback(Error('UNABLE TO MODIFY VALUE TO NEGATIVE'), null);
+      } else {
+        connection.query(`UPDATE Treasures SET gold_value = ${treasure.gold_value + parseInt(gold_value)} WHERE id = ${id_treasure}`, (err2) => {
+          if (err) {
+            callback(err2, null);
+          } else {
+            module.exports.selectTreasureById(id_treasure, (err3, updatedTreasure) => {
+              if (err3) {
+                callback(err3, null);
+              } else {
+                callback(null, updatedTreasure);
+              }
+            });
+          }
+        });
+      }
     }
   });
 };
@@ -889,7 +900,7 @@ module.exports.selectLocationsByCity = (city, callback) => {
 };
 
 module.exports.selectLocationById = (id_location, callback) => {
-  connection.query(`SELECT * FROM Locaions WHERE id = ${id_location}`, (err, singleLocationArray) => {
+  connection.query(`SELECT * FROM Locations WHERE id = ${id_location}`, (err, singleLocationArray) => {
     if (err) {
       callback(err, null);
     } else {

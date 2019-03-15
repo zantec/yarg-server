@@ -244,7 +244,13 @@ app.patch('/treasure/date', (req, res) => {
 });
 
 app.patch('/treasure/gold', (req, res) => {
-  
+  db.updateTreasureGold(req.body.id_treasure, req.body.gold_value, (err, treasure) => {
+    if (err) {
+      res.send(500, 'UNABLE TO UPDATE TREASURE GOLD VALUES');
+    } else {
+      res.send(202, treasure);
+    }
+  });
 });
 
 // Able to set port and still work //
