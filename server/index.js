@@ -223,7 +223,6 @@ app.patch('/treasure/date', (req, res) => {
   });
 });
 
-
 // Able to set port and still work //
 const port = process.env.PORT || 3001;
 
@@ -231,3 +230,5 @@ const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`listening on port ${port}!`);
 });
+
+module.exports = app;
