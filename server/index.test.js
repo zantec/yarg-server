@@ -75,7 +75,6 @@ test('patch /user/password', (done) => {
             newPassword: 'pirates'
           }
         }).set('Accept', 'application/json').then(res2 => {
-          console.log(newPass);
           expect(_.isEqual(oldPass, newPass)).toBe(false);
           done();
         });
@@ -83,3 +82,70 @@ test('patch /user/password', (done) => {
     });
   });
 });
+
+test('patch /user/avatar', (done) => {
+  const images = ['https://google.com.jpg', 'https://google.com.png'];
+  db.selectUserByUsername('server', (err, user) => {
+    const oldAvatar = user.avatar;
+    request(server).patch('/user/avatar').send({
+      username: 'server',
+      avatar: _.includes(user.avatar, 'jpg') ? images[1] : images[0]
+    }).set('Accept', 'application/json').then(res => {
+      db.selectUserByUsername('server', (err, updatedUser) => {
+        const newAvatar = updatedUser.avatar;
+        expect(_.isEqual(oldAvatar, newAvatar)).toBe(false);
+        done();
+      });
+    });
+  });
+});
+
+test('get /user/riddles', (done) => {
+  request(server).get('/user/riddles?username=server').set('Accept', 'application/json').then(res => {
+    expect(Array.isArray(res.body)).toBe(true);
+    done();
+  });
+});
+
+test('post /user/riddles', (done) => {
+  db.selectFilteredUserInfoByUsername('server', (err, user) => {
+    const numRiddles = user.riddles.length;
+    request(server).post('/user/riddles').send({
+      title: 'What am I?',
+      latitude: '29.929470',
+      longitude: '-90.093109',
+      address: '1725 Delachaise St.',
+      city: 'New Orleans',
+      state: 'LA',
+      zipcode: '70115',
+      riddle: 'The booty be hidden,\nWhen found ye\' will sing,\nBe in a bowl on a table,\nBeneath ye\' olde\' orange thing!',
+      id_treasure: '9',
+      id_user: user.id
+    }).set('Accept', 'application/json').then(res => {
+      db.selectRiddlesByUsername('server', (err, riddles) => {
+        const newNumRiddles = riddles.length;
+        db.deleteRiddle(user.id, riddles[riddles.length - 1].id, (err) => {
+          expect(Math.abs(numRiddles - newNumRiddles)).toBe(1);
+          done();
+        });
+      });
+    });
+  });
+});
+
+test('delete /user/riddles', (done) => {
+  db.selectFilteredUserInfoByUsername('server', (err, info) => {
+    const numRiddles = info.riddles.length;
+    db.insertRiddle("It's literally right in front of you", -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 'Come at me bro \n and to you I will show \n riches that will make you king of the town \n lest fate bury you in the ground', '8', info.id, (err, riddle) => {
+      request(server).delete('/user/riddle').send({
+        id_user: info.id,
+        id_riddle: riddle.id
+      }).set('Accept', 'application/json').then(res => {
+        expect(res.body.length).toBe(numRiddles);
+        done();
+      });
+    });
+  });
+});
+
+test()
