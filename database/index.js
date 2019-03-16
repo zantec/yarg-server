@@ -544,7 +544,7 @@ module.exports.deleteTreasure = (id_user, id_treasure, callback) => {
             } else {
               const treasureRiddleId = _.map(_.filter(riddles, riddles => riddles.id_treasure === parseInt(id_treasure)), riddle => riddle.id_treasure);
               _.forEach(treasureRiddleId, (id) => {
-                module.exports.deleteRiddle(id, () => { console.log('error'); });
+                module.exports.deleteRiddle(user.id, id, () => { console.log('error'); });
               });
               connection.query(`DELETE FROM UserTreasures WHERE id_treasure = ${parseInt(id_treasure)}`);
               connection.query(`DELETE FROM Locations WHERE id = ${treasure.id_location}`);
