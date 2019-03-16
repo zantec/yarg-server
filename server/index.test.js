@@ -133,7 +133,7 @@ test('post /user/riddles', (done) => {
   });
 });
 
-test('delete /user/riddles', (done) => {
+test('delete /user/riddle', (done) => {
   db.selectFilteredUserInfoByUsername('server', (err, info) => {
     const numRiddles = info.riddles.length;
     db.insertRiddle("It's literally right in front of you", -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 'Come at me bro \n and to you I will show \n riches that will make you king of the town \n lest fate bury you in the ground', '8', info.id, (err, riddle) => {
@@ -148,4 +148,54 @@ test('delete /user/riddles', (done) => {
   });
 });
 
-test()
+test('get /user/treasures', (done) => {
+  request(server).get('/user/treasures?username=server').set('Accept', 'application/json').then(res => {
+    expect(Array.isArray(res.body)).toBe(true);
+    done();
+  });
+});
+
+test('post /user/treasures', (done) => {
+  db.selectFilteredUserInfoByUsername('server', (err, userInfo) => {
+    const numOfTreasures = userInfo.treasures.length;
+    request(server).post('/user/treasures').send({
+      gold_value: '400',
+      longitude: '-90.093109',
+      latitude: '29.929470',
+      address: '1725 Delachaise St.',
+      city: 'New Orleans',
+      state: 'LA',
+      zipcode: '70115',
+      id_user: userInfo.id 
+    }).set('Accept', 'application/json').then(res => {
+      db.selectTreasuresByUsername('server', (err, treasures) => {
+        const newNum = treasures.length;
+        db.deleteTreasure(userInfo.id, res.body.id, (err) => {
+          expect(_.isEqual(newNum, numOfTreasures)).toBe(false);
+          done();
+        });
+      });
+    });
+  });
+});
+
+test('delete /user/treasure', (done) => {
+  db.selectFilteredUserInfoByUsername('server', (err, user) => {
+    db.insertTreasure(1000, -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', user.id, (err, treasure) => {
+      request(server).delete('/user/treasure').send({
+        id_user: user.id,
+        id_treasure: treasure.id
+      }).set('Accept', 'application/json').then(res => {
+        expect(res.body.length).toBe(user.treasures.length);
+        done();
+      });
+    });
+  });
+});
+
+test('get /user/inventory', (done) => {
+  request(server).get('/user/inventory?username=server').set('Accept', 'application/json').then(res => {
+    expect(typeof res.body).toBe('object');
+    done();
+  });
+});
