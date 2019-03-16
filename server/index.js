@@ -87,11 +87,11 @@ app.patch('/user/password', (req, res) => {
 });
 
 app.patch('/user/gold', (req, res) => {
-  db.updateUserGold(req.body.username, req.body.ammount, (err, user) => {
+  db.updateUserGold(req.body.username, req.body.amount, (err, user) => {
     if (err) {
       res.status(500).send('UNABLE TO UPDATE USER GOLD');
     } else {
-      db.insertGoldTransaction(user.id, req.body.ammount, (err2, res) => {
+      db.insertGoldTransaction(user.id, req.body.amount, (err2, res) => {
         if (!err2) {
           console.log('Transaction Complete!');
         }
