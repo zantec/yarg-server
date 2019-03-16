@@ -199,3 +199,64 @@ test('get /user/inventory', (done) => {
     done();
   });
 });
+
+test('post /user/inventory', (done) => {
+  db.selectFilteredUserInfoByUsername('server', (err, user) => {
+    db.insertRiddle("It's literally right in front of you", -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 'Come at me bro \n and to you I will show \n riches that will make you king of the town \n lest fate bury you in the ground', '1', '1', (err, riddle) => {
+      request(server).post('/user/inventory').send({
+        id_user: user.id,
+        id_riddle: riddle.id
+      }).set('Accept', 'application/json').then(res => {
+        db.deleteRiddle(user.id, riddle.id, (err) => {
+          expect(user.inventory.items.length).toBe(res.body.length - 1);
+          done();
+        });
+      });
+    });
+  });
+});
+
+test('get /riddles/city', (done) => {
+  request(server).get('/riddles/city?username=server').set('Accept', 'application/json').then(res => {
+    expect(Array.isArray(res.body)).toBe(true);
+    done();
+  });
+});
+
+test('get /treasures/city', (done) => {
+  request(server).get('/treasures/city?username=server').set('Accept', 'application/json').then(res => {
+    expect(Array.isArray(res.body)).toBe(true);
+    done();
+  });
+});
+
+test('patch /treasure/date', (done) => {
+  db.selectFilteredUserInfoByUsername('server', (err, user) => {
+    db.insertTreasure(1000, -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', user.id, (err, treasure) => {
+      request(server).patch('/treasure/date').send({
+        id_treasure: treasure.id
+      }).set('Accept', 'application/json').then(res => {
+        db.deleteTreasure(user.id, treasure.id, (err) => {
+          expect(new Date(res.body.date_claimed).getFullYear() === new Date().getFullYear()).toBe(true);
+          done();
+        });
+      });
+    });
+  });
+});
+
+test('patch /treasure/gold', (done) => {
+  db.selectFilteredUserInfoByUsername('server', (err, user) => {
+    db.insertTreasure(1000, -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', user.id, (err, treasure) => {
+      request(server).patch('/treasure/gold').send({
+        id_treasure: treasure.id,
+        gold_value: 2000
+      }).set('Accept', 'application/json').then(res => {
+        db.deleteTreasure(user.id, treasure.id, (err) => {
+          expect(res.body.gold_value - 2000).toBe(treasure.gold_value);
+          done();
+        });
+      });
+    });
+  });
+});
