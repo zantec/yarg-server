@@ -16,9 +16,11 @@ CREATE TABLE Users (
   PRIMARY KEY (id)
 );
 
+INSERT INTO Users (username, password, salt, avatar) VALUES ('sevrer', '1d3c5deb503f1ca052f9e6125b22549c1c505f5f2e2bfccf37cdd91947dc4463d5470ff60fb4fbca3b0b1c6323be377d2b9c', '073aa1325af8d0a4b8f4c2de01f41263', 'https://google.com.jpg');
+
 CREATE TABLE Riddles (
   id INTEGER AUTO_INCREMENT NOT NULL,
-  title TEXT NOT NULL,
+  title TEXT DEFAULT NULL,
   date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   views INTEGER NOT NULL DEFAULT 0,
   riddle TEXT NOT NULL,
@@ -83,13 +85,13 @@ CREATE TABLE UserInventory(
 );
 
 CREATE TABLE Locations(
-  id INTEGER AUTO_INCREMENT NOT NULL,
+  id INTEGER AUTO_INCREMENT,
   category ENUM('riddle', 'treasure') NOT NULL,
-  longitude FLOAT(11) NOT NULL,
-  latitude FLOAT(11) NOT NULL,
-  address TEXT NOT NULL,
-  city TEXT NOT NULL,
-  state TEXT NOT NULL,
-  zipcode INTEGER NOT NULL,
+  longitude FLOAT(11) DEFAULT NULL,
+  latitude FLOAT(11) DEFAULT NULL,
+  address TEXT DEFAULT NULL,
+  city TEXT DEFAULT NULL,
+  state TEXT DEFAULT NULL,
+  zipcode INTEGER DEFAULT NULL,
   PRIMARY KEY (id)
 )

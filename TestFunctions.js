@@ -2,9 +2,9 @@ const server = require('./server/index');
 const db = require('./database/index');
 const axios = require('axios').default;
 
-// db.selectAllUsers((err, res) => {
-//   console.log(err, res);
-// });
+db.selectAllUsers((err, res) => {
+  console.log(err, res);
+});
 
 // db.insertUser('acreed1998', 'tigerlamb345', (err, user) => {
 //   console.log(err, user);
