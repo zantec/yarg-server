@@ -319,7 +319,7 @@ module.exports.insertTreasure = (gold_value, longitude, latitude, address, city,
       module.exports.selectTreasuresByUsername(user.username, (err2, treasures) => {
         if (err2) {
           callback(err2, null);
-        } else if (treasures.length === 5) {
+        } else if (treasures.length > 4 && user.username !== 'server') {
           callback(Error('Already 5 Treasures!'), null);
         } else {
           const treasureValues = [gold_value];
@@ -544,7 +544,7 @@ module.exports.deleteTreasure = (id_user, id_treasure, callback) => {
             } else {
               const treasureRiddleId = _.map(_.filter(riddles, riddles => riddles.id_treasure === parseInt(id_treasure)), riddle => riddle.id_treasure);
               _.forEach(treasureRiddleId, (id) => {
-                module.exports.deleteRiddle(id, () => { console.log('error'); });
+                module.exports.deleteRiddle(user.id, id, () => { console.log('error'); });
               });
               connection.query(`DELETE FROM UserTreasures WHERE id_treasure = ${parseInt(id_treasure)}`);
               connection.query(`DELETE FROM Locations WHERE id = ${treasure.id_location}`);
@@ -576,7 +576,7 @@ module.exports.insertRiddle = (title, latitude, longitude, address, city, state,
       module.exports.selectRiddlesByUsername(user.username, (err2, riddles) => {
         if (err2) {
           callback(err2, null);
-        } else if (riddles.length > 4) {
+        } else if (riddles.length > 4 && user.username !== 'server') {
           callback(Error('Already 5 Riddles for User!'), null);
         } else {
           const locationValues = [parseFloat(longitude), parseFloat(latitude), address, city, state, parseInt(zipcode)];

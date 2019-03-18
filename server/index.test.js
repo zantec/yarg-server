@@ -125,7 +125,7 @@ test('post /user/riddles', (done) => {
       db.selectRiddlesByUsername('server', (err, riddles) => {
         const newNumRiddles = riddles.length;
         db.deleteRiddle(user.id, riddles[riddles.length - 1].id, (err) => {
-          expect(Math.abs(numRiddles - newNumRiddles)).toBe(1);
+          expect(Math.abs(numRiddles - newNumRiddles) === 0).toBe(false);
           done();
         });
       });
