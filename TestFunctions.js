@@ -2,9 +2,9 @@ const server = require('./server/index');
 const db = require('./database/index');
 const axios = require('axios').default;
 
-db.selectAllUsers((err, res) => {
-  console.log(err, res);
-});
+// db.selectAllUsers((err, res) => {
+//   console.log(err, res);
+// });
 
 // db.insertUser('acreed1998', 'tigerlamb345', (err, user) => {
 //   console.log(err, user);
@@ -54,9 +54,9 @@ db.selectAllUsers((err, res) => {
 //   console.log(err, res);
 // });
 
-// db.selectTreasuresByZipcode('70115', (err, res) => {
-//   console.log(err, res);
-// });
+db.selectTreasuresByZipcode('70119', (err, res) => {
+  console.log(err, res);
+});
 
 // db.insertRiddle("It's literally right in front of you", -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 'Come at me bro \n and to you I will show \n riches that will make you king of the town \n lest fate bury you in the ground', '1', '1', (err, res) => {
 //   console.log(err, res);
@@ -115,5 +115,9 @@ db.selectAllUsers((err, res) => {
 // });
 
 // db.selectRiddlesByCity('New Orleans', (err, res) => {
+//   console.log(err, res);
+// });
+
+// db.selectRiddlesByZipcode(70115, (err, res) => {
 //   console.log(err, res);
 // });

@@ -254,7 +254,7 @@ app.patch('/treasure/gold', (req, res) => {
 });
 
 // Able to set port and still work //
-const port = process.env.PORT || 3001;
+const port = process.env.DB_PORT || 3001;
 
 // Listen and console log current port //
 app.listen(port, () => {
