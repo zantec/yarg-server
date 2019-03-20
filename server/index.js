@@ -213,6 +213,16 @@ app.get('/riddles/city', (req, res) => {
   });
 });
 
+app.get('/riddles/zipcode', (req, res) => {
+  db.selectRiddlesByZipcode(req.query.zipcode, (err, riddles) => {
+    if (err) {
+      res.send(500, 'UNABLE TO GET RIDDLES BY ZIPCODE');
+    } else {
+      res.send(200, riddles);
+    }
+  });
+});
+
 app.patch('/riddle/views', (req, res) => {
   db.updateRiddleViews(req.body.username, req.body.id_riddle, (err, riddle) => {
     if (err) {
