@@ -243,6 +243,16 @@ app.get('/treasures/city', (req, res) => {
   });
 });
 
+app.get('/treasures/zipcode', (req, res) => {
+  db.selectTreasuresByZipcode(req.query.zipcode, (err, treasures) => {
+    if (err) {
+      res.send(500, 'UNABLE TO GET REASURES BY ZIPCODE');
+    } else {
+      res.send(200, treasures);
+    }
+  });
+});
+
 app.patch('/treasure/date', (req, res) => {  
   db.updateTreasureDateClaimed(req.body.id_treasure, (err, treasure) => {
     if (err) {

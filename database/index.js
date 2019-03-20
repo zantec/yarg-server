@@ -453,6 +453,7 @@ module.exports.selectTreasuresByZipcode = (zipcode, callback) => {
           if (err2) {
             callback(err2, null);
           } else {
+            treasure.location_data = location;
             treasures.push(treasure);
             if (index === locations.length - 1) {
               callback(null, treasures);
