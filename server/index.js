@@ -213,6 +213,16 @@ app.get('/riddles/city', (req, res) => {
   });
 });
 
+app.get('/riddles/zipcode', (req, res) => {
+  db.selectRiddlesByZipcode(req.query.zipcode, (err, riddles) => {
+    if (err) {
+      res.send(500, 'UNABLE TO GET RIDDLES BY ZIPCODE');
+    } else {
+      res.send(200, riddles);
+    }
+  });
+});
+
 app.patch('/riddle/views', (req, res) => {
   db.updateRiddleViews(req.body.username, req.body.id_riddle, (err, riddle) => {
     if (err) {
@@ -229,6 +239,16 @@ app.get('/treasures/city', (req, res) => {
       res.status(500).send('UNABLE TO GET TREASURES');
     } else {
       res.status(200).send(treasures);
+    }
+  });
+});
+
+app.get('/treasures/zipcode', (req, res) => {
+  db.selectTreasuresByZipcode(req.query.zipcode, (err, treasures) => {
+    if (err) {
+      res.send(500, 'UNABLE TO GET REASURES BY ZIPCODE');
+    } else {
+      res.send(200, treasures);
     }
   });
 });
@@ -254,7 +274,7 @@ app.patch('/treasure/gold', (req, res) => {
 });
 
 // Able to set port and still work //
-const port = process.env.PORT || 3001;
+const port = process.env.DB_PORT || 3001;
 
 // Listen and console log current port //
 app.listen(port, () => {

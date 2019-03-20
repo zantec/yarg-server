@@ -453,6 +453,7 @@ module.exports.selectTreasuresByZipcode = (zipcode, callback) => {
           if (err2) {
             callback(err2, null);
           } else {
+            treasure.location_data = location;
             treasures.push(treasure);
             if (index === locations.length - 1) {
               callback(null, treasures);
@@ -638,6 +639,26 @@ module.exports.selectRiddleByTreasure = (id_treasure, callback) => {
     } else {
       callback(null, singleTreasureArray[0]);
     }
+  });
+};
+
+module.exports.selectRiddlesByZipcode  = (zipcode, callback) => {
+  module.exports.selectLocationsByCategory('riddle', (err, locations) => {
+    const filteredLocations = _.filter(locations, location => location.zipcode === parseInt(zipcode));
+    const filteredLocationsIds = _.map(filteredLocations, location => location.id);
+    module.exports.selectAllRiddles((err2, riddles) => {
+      if (err2) {
+        callback(err3, null);
+      } else {
+        const filteredRiddles = _.map(_.filter(riddles, riddle => _.includes(filteredLocationsIds, riddle.id_location)), riddle => {
+          riddle.location_data = _.find(filteredLocations, (location) => {
+            return location.id === riddle.id_location;
+          });
+          return riddle;
+        });
+        callback(null, filteredRiddles);
+      }
+    });
   });
 };
 

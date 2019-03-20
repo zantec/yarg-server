@@ -2,9 +2,9 @@ const server = require('./server/index');
 const db = require('./database/index');
 const axios = require('axios').default;
 
-db.selectAllUsers((err, res) => {
-  console.log(err, res);
-});
+// db.selectAllUsers((err, res) => {
+//   console.log(err, res);
+// });
 
 // db.insertUser('acreed1998', 'tigerlamb345', (err, user) => {
 //   console.log(err, user);
@@ -54,7 +54,7 @@ db.selectAllUsers((err, res) => {
 //   console.log(err, res);
 // });
 
-// db.selectTreasuresByZipcode('70115', (err, res) => {
+// db.selectTreasuresByZipcode('70119', (err, res) => {
 //   console.log(err, res);
 // });
 
@@ -115,5 +115,9 @@ db.selectAllUsers((err, res) => {
 // });
 
 // db.selectRiddlesByCity('New Orleans', (err, res) => {
+//   console.log(err, res);
+// });
+
+// db.selectRiddlesByZipcode(70115, (err, res) => {
 //   console.log(err, res);
 // });
