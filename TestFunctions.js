@@ -106,8 +106,8 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.deleteTreasure(1, 2, (err, res) => {
-
+// db.deleteTreasure(2, (err, res) => {
+//   console.log(err, res);
 // });
 
 // db.selectTreasuresByCity('New Orleans', (err, res) => {
