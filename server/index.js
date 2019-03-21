@@ -132,7 +132,7 @@ app.post('/user/riddles', (req, res) => {
 });
 
 app.delete('/user/riddle', (req, res) => {
-  db.deleteRiddle(req.query.id_user, req.query.id_riddle, (err, riddles) => {
+  db.deleteRiddle(req.query.id_riddle, (err, riddles) => {
     if (err) {
       res.status(500).send('ERROR OCCURRED WHILE DELETING RIDDLE');
     } else {
@@ -162,7 +162,7 @@ app.post('/user/treasures', (req, res) => {
 });
 
 app.delete('/user/treasure', (req, res) => {
-  db.deleteTreasure(req.query.id_user, req.query.id_treasure, (err, treasures) => {
+  db.deleteTreasure(req.query.id_treasure, (err, treasures) => {
     if (err) {
       res.status(500).send('UNABLE TO DELETE TREASURE');
     } else {
