@@ -16,7 +16,7 @@ CREATE TABLE Users (
   PRIMARY KEY (id)
 );
 
-INSERT INTO Users (username, password, salt, avatar) VALUES ('sevrer', '1d3c5deb503f1ca052f9e6125b22549c1c505f5f2e2bfccf37cdd91947dc4463d5470ff60fb4fbca3b0b1c6323be377d2b9c', '073aa1325af8d0a4b8f4c2de01f41263', 'https://google.com.jpg');
+INSERT INTO Users (username, password, salt, avatar) VALUES ('server', '1d3c5deb503f1ca052f9e6125b22549c1c505f5f2e2bfccf37cdd91947dc4463d5470ff60fb4fbca3b0b1c6323be377d2b9c', '073aa1325af8d0a4b8f4c2de01f41263', 'https://google.com.jpg');
 
 CREATE TABLE Riddles (
   id INTEGER AUTO_INCREMENT NOT NULL,
