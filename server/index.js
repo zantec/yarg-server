@@ -132,7 +132,7 @@ app.post('/user/riddles', (req, res) => {
 });
 
 app.delete('/user/riddle', (req, res) => {
-  db.deleteRiddle(req.body.id_user, req.body.id_riddle, (err, riddles) => {
+  db.deleteRiddle(req.query.id_user, req.query.id_riddle, (err, riddles) => {
     if (err) {
       res.status(500).send('ERROR OCCURRED WHILE DELETING RIDDLE');
     } else {
@@ -162,7 +162,7 @@ app.post('/user/treasures', (req, res) => {
 });
 
 app.delete('/user/treasure', (req, res) => {
-  db.deleteTreasure(req.body.id_user, req.body.id_treasure, (err, treasures) => {
+  db.deleteTreasure(req.query.id_user, req.query.id_treasure, (err, treasures) => {
     if (err) {
       res.status(500).send('UNABLE TO DELETE TREASURE');
     } else {
@@ -214,7 +214,7 @@ app.get('/riddles/city', (req, res) => {
 });
 
 app.get('/riddles/zipcode', (req, res) => {
-  db.selectRiddlesByZipcode(req.query.zipcode, (err, riddles) => {
+  db.selectRiddlesByZipcode(req.query.username, req.query.zipcode, (err, riddles) => {
     if (err) {
       res.send(500, 'UNABLE TO GET RIDDLES BY ZIPCODE');
     } else {
@@ -244,9 +244,9 @@ app.get('/treasures/city', (req, res) => {
 });
 
 app.get('/treasures/zipcode', (req, res) => {
-  db.selectTreasuresByZipcode(req.query.zipcode, (err, treasures) => {
+  db.selectTreasuresByZipcode(req.query.username, req.query.zipcode, (err, treasures) => {
     if (err) {
-      res.send(500, 'UNABLE TO GET REASURES BY ZIPCODE');
+      res.send(500, 'UNABLE TO GET TREASURES BY ZIPCODE');
     } else {
       res.send(200, treasures);
     }
