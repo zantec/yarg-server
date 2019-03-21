@@ -460,6 +460,8 @@ module.exports.selectTreasuresByZipcode = (username, zipcode, callback) => {
       connection.query(`SELECT * FROM Locations WHERE zipcode = ${parseInt(zipcode)} AND category = 'treasure'`, (err, locations) => {
         if (err) {
           callback(err, null);
+        } else if (locations.length === 0) {
+          callback(Error('NO LOCATIONS'), null);
         } else {
           const treasures = [];
           _.forEach(locations, (location, index) => {
