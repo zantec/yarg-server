@@ -442,7 +442,7 @@ module.exports.selectTreasureByLocationId = (id_location, callback) => {
   });
 };
 
-module.exports.selectTreasuresByZipcode = (zipcode, callback) => {
+module.exports.selectTreasuresByZipcode = (id_user, zipcode, callback) => {
   connection.query(`SELECT * FROM Locations WHERE zipcode = ${parseInt(zipcode)} AND category = 'treasure'`, (err, locations) => {
     if (err) {
       callback(err, null);
@@ -642,23 +642,30 @@ module.exports.selectRiddleByTreasure = (id_treasure, callback) => {
   });
 };
 
-module.exports.selectRiddlesByZipcode  = (zipcode, callback) => {
-  module.exports.selectLocationsByCategory('riddle', (err, locations) => {
-    const filteredLocations = _.filter(locations, location => location.zipcode === parseInt(zipcode));
-    const filteredLocationsIds = _.map(filteredLocations, location => location.id);
-    module.exports.selectAllRiddles((err2, riddles) => {
-      if (err2) {
-        callback(err3, null);
-      } else {
-        const filteredRiddles = _.map(_.filter(riddles, riddle => _.includes(filteredLocationsIds, riddle.id_location)), riddle => {
-          riddle.location_data = _.find(filteredLocations, (location) => {
-            return location.id === riddle.id_location;
-          });
-          return riddle;
+module.exports.selectRiddlesByZipcode  = (username, zipcode, callback) => {
+  module.exports.selectRiddlesByUsername(username, (err, userRiddles) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      const userRiddleIds = _.map(userRiddles, riddle => riddle.id);
+      module.exports.selectLocationsByCategory('riddle', (err, locations) => {
+        const filteredLocations = _.filter(locations, location => location.zipcode === parseInt(zipcode));
+        const filteredLocationsIds = _.map(filteredLocations, location => location.id);
+        module.exports.selectAllRiddles((err2, riddles) => {
+          if (err2) {
+            callback(err3, null);
+          } else {
+            const filteredRiddles = _.map(_.filter(riddles, riddle => _.includes(filteredLocationsIds, riddle.id_location)), riddle => {
+              riddle.location_data = _.find(filteredLocations, (location) => {
+                return location.id === riddle.id_location;
+              });
+              return riddle;
+            });
+            callback(null, _.filter(filteredRiddles, riddle => !_.includes(userRiddleIds, riddle.id)));
+          }
         });
-        callback(null, filteredRiddles);
-      }
-    });
+      });
+    }
   });
 };
 
