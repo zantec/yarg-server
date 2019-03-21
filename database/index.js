@@ -461,7 +461,7 @@ module.exports.selectTreasuresByZipcode = (username, zipcode, callback) => {
         if (err) {
           callback(err, null);
         } else if (locations.length === 0) {
-          callback(Error('NO LOCATIONS'), null);
+          callback(null, []);
         } else {
           const treasures = [];
           _.forEach(locations, (location, index) => {
