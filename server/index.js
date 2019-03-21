@@ -214,7 +214,7 @@ app.get('/riddles/city', (req, res) => {
 });
 
 app.get('/riddles/zipcode', (req, res) => {
-  db.selectRiddlesByZipcode(req.query.zipcode, (err, riddles) => {
+  db.selectRiddlesByZipcode(req.query.username, req.query.zipcode, (err, riddles) => {
     if (err) {
       res.send(500, 'UNABLE TO GET RIDDLES BY ZIPCODE');
     } else {
@@ -244,9 +244,9 @@ app.get('/treasures/city', (req, res) => {
 });
 
 app.get('/treasures/zipcode', (req, res) => {
-  db.selectTreasuresByZipcode(req.query.zipcode, (err, treasures) => {
+  db.selectTreasuresByZipcode(req.query.username, req.query.zipcode, (err, treasures) => {
     if (err) {
-      res.send(500, 'UNABLE TO GET REASURES BY ZIPCODE');
+      res.send(500, 'UNABLE TO GET TREASURES BY ZIPCODE');
     } else {
       res.send(200, treasures);
     }
