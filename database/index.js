@@ -442,24 +442,37 @@ module.exports.selectTreasureByLocationId = (id_location, callback) => {
   });
 };
 
-module.exports.selectTreasuresByZipcode = (id_user, zipcode, callback) => {
-  connection.query(`SELECT * FROM Locations WHERE zipcode = ${parseInt(zipcode)} AND category = 'treasure'`, (err, locations) => {
+module.exports.selectTreasuresByZipcode = (username, zipcode, callback) => {
+  module.exports.selectTreasuresByUsername(username, (err, userTreasures) => {
     if (err) {
       callback(err, null);
     } else {
-      const treasures = [];
-      _.forEach(locations, (location, index) => {
-        module.exports.selectTreasureByLocationId(location.id, (err2, treasure) => {
-          if (err2) {
-            callback(err2, null);
-          } else {
-            treasure.location_data = location;
-            treasures.push(treasure);
-            if (index === locations.length - 1) {
-              callback(null, treasures);
-            }
-          }
-        });
+      const userTreasureIds = _.map(userTreasures, treasure => treasure.id);
+      connection.query(`SELECT * FROM Locations WHERE zipcode = ${parseInt(zipcode)} AND category = 'treasure'`, (err, locations) => {
+        if (err) {
+          callback(err, null);
+        } else {
+          const treasures = [];
+          _.forEach(locations, (location, index) => {
+            module.exports.selectTreasureByLocationId(location.id, (err2, treasure) => {
+              if (err2) {
+                callback(err2, null);
+              } else {
+                if (!_.includes(userTreasureIds, treasure.id)) {
+                  treasure.location_data = location;
+                  treasures.push(treasure);
+                  if (index === locations.length - 1) {
+                    callback(null, treasures);
+                  }
+                } else {
+                  if (index === locations.length - 1) {
+                    callback(null, treasures);
+                  }
+                }
+              }
+            });
+          });
+        }
       });
     }
   });
