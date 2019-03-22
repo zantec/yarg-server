@@ -273,7 +273,7 @@ app.patch('/treasure/gold', (req, res) => {
   });
 });
 
-// LEADERBOARD GET REQUESTS===============================
+// LEADERBOARD GET REQUEST===============================
 
 app.get('/leaderboard/:sortBy', (req, res) => {
   if (req.params.sortBy === 'gold') {
@@ -295,6 +295,24 @@ app.get('/leaderboard/:sortBy', (req, res) => {
     });
   }
 });
+
+// USER-STATS GET REQUEST================================
+
+app.get('/user/stats', (req, res) => {
+  const stats = {};
+  db.selectFilteredUserInfoByUsername(req.query.username, (err, userInfo) => {
+    console.log(userInfo);
+    if (err) {
+      res.status(500).send('uh oh');
+    } else {
+      stats.username = userInfo.username;
+      stats.avatar = userInfo.avatar;
+      stats.gold = userInfo.gold;
+      res.status(200).send(stats);
+    }
+  });
+})
+
 
 // Able to set port and still work //
 const port = process.env.PORT || 3001;
