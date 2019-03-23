@@ -121,3 +121,11 @@ const axios = require('axios').default;
 // db.selectRiddlesByZipcode(70115, (err, res) => {
 //   console.log(err, res);
 // });
+
+db.selectFilteredUsers(['sevrer'], (err, res) => {
+  console.log(err, res);
+});
+
+db.selectAllFilteredUserInfo((err, res) => {
+  console.log(err, res);
+});
