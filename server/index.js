@@ -311,7 +311,10 @@ app.get('/user/stats', (req, res) => {
       res.status(200).send(stats);
     }
   });
-})
+});
+
+// USER-INVENTORY GET REQUEST=============================
+
 
 
 // Able to set port and still work //
