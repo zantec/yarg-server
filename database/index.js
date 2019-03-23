@@ -124,6 +124,15 @@ module.exports.insertUser = (username, password, callback) => {
   });
 };
 
+module.exports.selectFilteredUsers = (users, callback) => {
+  module.exports.selectAllUsers((err, currentUsers) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, _.filter(currentUsers, user => !_.includes(users, user.username)));
+    }
+  });
+};
 
 module.exports.selectAllUsers = (callback) => {
   connection.query('SELECT * FROM Users', (err, users) => {
