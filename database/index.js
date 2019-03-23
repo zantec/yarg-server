@@ -124,6 +124,10 @@ module.exports.insertUser = (username, password, callback) => {
   });
 };
 
+/**
+ * @param {Array} users - An array of username's
+ * @param {Function} callback - A function to be executed on the array of users
+ */
 module.exports.selectFilteredUsers = (users, callback) => {
   module.exports.selectAllUsers((err, currentUsers) => {
     if (err) {
