@@ -273,8 +273,49 @@ app.patch('/treasure/gold', (req, res) => {
   });
 });
 
+// LEADERBOARD GET REQUEST===============================
+
+app.get('/leaderboard/:sortBy', (req, res) => {
+  if (req.params.sortBy === 'gold') {
+    db.selectAllUsers((err, users) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const topTen = users.sort((left, right) => {
+          return right.gold - left.gold;
+        }).slice(0, 10).map((user) => {
+          return {
+            username: user.username,
+            gold: user.gold,
+            avatar: user.avatar,
+          };
+        });
+        res.status(200).send(topTen);
+      }
+    });
+  }
+});
+
+// USER-STATS GET REQUEST================================
+
+app.get('/user/stats', (req, res) => {
+  const stats = {};
+  db.selectFilteredUserInfoByUsername(req.query.username, (err, userInfo) => {
+    console.log(userInfo);
+    if (err) {
+      res.status(500).send('uh oh');
+    } else {
+      stats.username = userInfo.username;
+      stats.avatar = userInfo.avatar;
+      stats.gold = userInfo.gold;
+      res.status(200).send(stats);
+    }
+  });
+})
+
+
 // Able to set port and still work //
-const port = process.env.DB_PORT || 3001;
+const port = process.env.PORT || 3001;
 
 // Listen and console log current port //
 app.listen(port, () => {
