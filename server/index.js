@@ -276,42 +276,48 @@ app.patch('/treasure/gold', (req, res) => {
 // LEADERBOARD GET REQUEST===============================
 
 app.get('/leaderboard/:sortBy', (req, res) => {
-  if (req.params.sortBy === 'gold') {
-    db.selectAllUsers((err, users) => {
-      if (err) {
-        console.log(err);
-      } else {
-        const topTen = users.sort((left, right) => {
-          return right.gold - left.gold;
-        }).slice(0, 10).map((user) => {
-          return {
-            username: user.username,
-            gold: user.gold,
-            avatar: user.avatar,
-          };
-        });
-        res.status(200).send(topTen);
-      }
-    });
-  }
+  db.selectAllUsers((err, users) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const topTen = users.sort((left, right) => {
+          return right[req.params.sortBy] - left[req.params.sortBy];
+      }).slice(0, 10).map((user) => {
+        return {
+          username: user.username,
+          avatar: user.avatar,
+          gold: user.gold,
+          highestGold: user.highestGold,
+          found: user.found,
+          hidden: user.hidden,
+        };
+      });
+      res.status(200).send(topTen);
+    }
+  });
 });
 
 // USER-STATS GET REQUEST================================
 
 app.get('/user/stats', (req, res) => {
   const stats = {};
-  db.selectFilteredUserInfoByUsername(req.query.username, (err, userInfo) => {
-    console.log(userInfo);
+  db.selectUserByUsername(req.query.username, (err, user) => {
     if (err) {
-      res.status(500).send('uh oh');
+      res.status(500).send('COULD NOT QUERY DB');
     } else {
-      stats.username = userInfo.username;
-      stats.avatar = userInfo.avatar;
-      stats.gold = userInfo.gold;
+      stats.username = user.username;
+      stats.avatar = user.avatar;
+      stats.gold = user.gold;
+      stats.highestGold = user.highestGold;
+      stats.found = user.found;
+      stats.hidden = user.hidden;
       res.status(200).send(stats);
     }
   });
-})
+});
+
+// USER-INVENTORY GET REQUEST=============================
+
 
 
 // Able to set port and still work //
