@@ -122,10 +122,6 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-db.selectFilteredUsers(['sevrer'], (err, res) => {
-  console.log(err, res);
-});
-
-db.selectAllFilteredUserInfo((err, res) => {
-  console.log(err, res);
-});
+// db.selectFilteredUsers(['sevrer'], (err, res) => {
+//   console.log(err, res);
+// });
