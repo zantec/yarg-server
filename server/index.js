@@ -276,7 +276,7 @@ app.patch('/treasure/gold', (req, res) => {
 // LEADERBOARD GET REQUEST===============================
 
 app.get('/leaderboard/:sortBy', (req, res) => {
-  if (req.params.sortBy === 'gold') {
+  if (req.params.sortBy) {
     db.selectAllUsers((err, users) => {
       if (err) {
         console.log(err);
@@ -294,6 +294,8 @@ app.get('/leaderboard/:sortBy', (req, res) => {
         res.status(200).send(topTen);
       }
     });
+  } else {
+    res.send(500, 'UNABLE TO SORT USERS');
   }
 });
 
@@ -301,18 +303,23 @@ app.get('/leaderboard/:sortBy', (req, res) => {
 
 app.get('/user/stats', (req, res) => {
   const stats = {};
-  db.selectFilteredUserInfoByUsername(req.query.username, (err, userInfo) => {
-    console.log(userInfo);
+  const filterOut = ['password', 'salt'];
+  db.selectUserByUsername(req.query.username, (err, user) => {
     if (err) {
-      res.status(500).send('uh oh');
+      res.status(500).send('COULD NOT QUERY DB');
     } else {
-      stats.username = userInfo.username;
-      stats.avatar = userInfo.avatar;
-      stats.gold = userInfo.gold;
+      _.forEach(user, (value, key) => {
+        if (!_.includes(filterOut, key)) {
+          stats[key] = value;
+        }
+      });
       res.status(200).send(stats);
     }
   });
-})
+});
+
+// USER-INVENTORY GET REQUEST=============================
+
 
 
 // Able to set port and still work //
