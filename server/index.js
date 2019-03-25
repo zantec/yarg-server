@@ -282,11 +282,12 @@ app.get('/leaderboard/:sortBy', (req, res) => {
         console.log(err);
       } else {
         const topTen = users.sort((left, right) => {
-          return right.gold - left.gold;
+          return right[req.params.sortBy] - left[req.params.sortBy];
         }).slice(0, 10).map((user) => {
           return {
             username: user.username,
             gold: user.gold,
+            treasures_placed: user.treasures_placed,
             avatar: user.avatar,
           };
         });

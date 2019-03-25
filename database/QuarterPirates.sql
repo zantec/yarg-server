@@ -8,16 +8,16 @@ USE pirates;
 
 CREATE TABLE Users (
   id INTEGER AUTO_INCREMENT NOT NULL,
-  username VARCHAR(15) NOT NULL,
+  username VARCHAR(64) NOT NULL,
   password TEXT NOT NULL,
   salt TEXT NOT NULL,
   gold INTEGER NOT NULL DEFAULT 1000,
   avatar TEXT NOT NULL,
   treasures_placed INTEGER NOT NULL DEFAULT 0,
-  treasures_claimed INTNEGER NOT NULL DEFAULT 0,
+  treasures_claimed INTEGER NOT NULL DEFAULT 0,
   riddles_placed INTEGER NOT NULL DEFAULT 0,
   higest_gold INTEGER NOT NULL DEFAULT 0,
-  higest_treasure_found INTEGER NOT NULL DEFAULT 0,
+  highest_treasure_found INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (id)
 );
 
