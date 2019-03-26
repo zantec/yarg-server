@@ -102,7 +102,7 @@ module.exports.insertUser = (username, password, callback) => {
         } else if (user === undefined) {
           const salt = crypto.randomBytes(16).toString('hex');
           const avatar = avatars.create(username);
-          const q = [username, crypto.pbkdf2Sync(password, salt, 1012, 50, 'sha512').toString('hex'), salt, avatar];
+          const q = [username, crypto.pbkdf2Sync(password, salt, 1012, 50, 'sha512').toString('hex'), salt, 'https://imgur.com/KfhK2Br.png'];
           connection.query('INSERT INTO Users (username, password, salt, avatar) VALUES (?, ?, ?, ?)', q, (err3) => {
             if (err3) {
               callback(err3, null);
