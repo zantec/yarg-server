@@ -102,7 +102,7 @@ module.exports.insertUser = (username, password, callback) => {
         } else if (user === undefined) {
           const salt = crypto.randomBytes(16).toString('hex');
           const avatar = avatars.create(username);
-          const q = [username, crypto.pbkdf2Sync(password, salt, 1012, 50, 'sha512').toString('hex'), salt, avatar];
+          const q = [username, crypto.pbkdf2Sync(password, salt, 1012, 50, 'sha512').toString('hex'), salt, 'https://imgur.com/KfhK2Br.png'];
           connection.query('INSERT INTO Users (username, password, salt, avatar) VALUES (?, ?, ?, ?)', q, (err3) => {
             if (err3) {
               callback(err3, null);
@@ -360,6 +360,7 @@ module.exports.insertTreasure = (gold_value, longitude, latitude, address, city,
                             } else {
                               const obj = treasure;
                               obj.location_data = locations[locations.length - 1];
+                              connection.query(`UPDATE Users SET treasures_placed = ${user.treasures_placed + 1} WHERE id = ${user.id}`);
                               callback(null, obj);
                             }
                           });

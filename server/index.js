@@ -276,41 +276,43 @@ app.patch('/treasure/gold', (req, res) => {
 // LEADERBOARD GET REQUEST===============================
 
 app.get('/leaderboard/:sortBy', (req, res) => {
-  db.selectAllUsers((err, users) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const topTen = users.sort((left, right) => {
+  if (req.params.sortBy) {
+    db.selectAllUsers((err, users) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const topTen = users.sort((left, right) => {
           return right[req.params.sortBy] - left[req.params.sortBy];
-      }).slice(0, 10).map((user) => {
-        return {
-          username: user.username,
-          avatar: user.avatar,
-          gold: user.gold,
-          highestGold: user.highestGold,
-          found: user.found,
-          hidden: user.hidden,
-        };
-      });
-      res.status(200).send(topTen);
-    }
-  });
+        }).slice(0, 10).map((user) => {
+          return {
+            username: user.username,
+            gold: user.gold,
+            treasures_placed: user.treasures_placed,
+            avatar: user.avatar,
+          };
+        });
+        res.status(200).send(topTen);
+      }
+    });
+  } else {
+    res.send(500, 'UNABLE TO SORT USERS');
+  }
 });
 
 // USER-STATS GET REQUEST================================
 
 app.get('/user/stats', (req, res) => {
   const stats = {};
+  const filterOut = ['password', 'salt'];
   db.selectUserByUsername(req.query.username, (err, user) => {
     if (err) {
       res.status(500).send('COULD NOT QUERY DB');
     } else {
-      stats.username = user.username;
-      stats.avatar = user.avatar;
-      stats.gold = user.gold;
-      stats.highestGold = user.highestGold;
-      stats.found = user.found;
-      stats.hidden = user.hidden;
+      _.forEach(user, (value, key) => {
+        if (!_.includes(filterOut, key)) {
+          stats[key] = value;
+        }
+      });
       res.status(200).send(stats);
     }
   });

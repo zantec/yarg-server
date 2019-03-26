@@ -42,7 +42,7 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.insertTreasure(1000, -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 1, (err, res) => {
+// db.insertTreasure(1000, -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 6, (err, res) => {
 //   console.log(err, res);
 // });
 
@@ -122,10 +122,6 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-db.selectFilteredUsers(['sevrer'], (err, res) => {
-  console.log(err, res);
-});
-
-db.selectAllFilteredUserInfo((err, res) => {
-  console.log(err, res);
-});
+// db.selectFilteredUsers(['sevrer'], (err, res) => {
+//   console.log(err, res);
+// });
