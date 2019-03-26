@@ -31,6 +31,7 @@ CREATE TABLE Riddles (
   riddle TEXT(4294967295) NOT NULL,
   id_treasure INTEGER NOT NULL,
   id_location INTEGER NOT NULL,
+  id_user INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -40,6 +41,7 @@ CREATE TABLE Treasures(
   date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   date_claimed TIMESTAMP DEFAULT '2000-01-01 00:00:00',
   id_location INTEGER NOT NULL,
+  id_user INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -56,20 +58,6 @@ CREATE TABLE GoldTransactions(
   id_user INTEGER NOT NULL,
   gold_value INTEGER NOT NULL,
   date_transaction TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE UserRiddles(
-  id INTEGER AUTO_INCREMENT NOT NULL,
-  id_user INTEGER NOT NULL,
-  id_riddle INTEGER NOT NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE UserTreasures(
-  id INTEGER AUTO_INCREMENT NOT NULL,
-  id_user INTEGER NOT NULL,
-  id_treasure INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
 

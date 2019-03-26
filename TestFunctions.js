@@ -6,7 +6,7 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.insertUser('acreed1998', 'tigerlamb345', (err, user) => {
+// db.insertUser('bake', 'bake', (err, user) => {
 //   console.log(err, user);
 // });
 
@@ -30,7 +30,7 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.verifyUserPassword('acreed1998', 'persona4dan', (err, res) => {
+// db.verifyUserPassword('acreed1998', 'tigerlamb345', (err, res) => {
 //   console.log(err, res);
 // });
 
@@ -42,7 +42,7 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.insertTreasure(1000, -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 6, (err, res) => {
+// db.insertTreasure(1000, -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 2, (err, res) => {
 //   console.log(err, res);
 // });
 
@@ -54,11 +54,11 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.selectTreasuresByZipcode('70119', (err, res) => {
+// db.selectTreasuresByZipcode('cake', '70115', (err, res) => {
 //   console.log(err, res);
 // });
 
-// db.insertRiddle("It's literally right in front of you", -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 'Come at me bro \n and to you I will show \n riches that will make you king of the town \n lest fate bury you in the ground', '1', '1', (err, res) => {
+// db.insertRiddle("It's literally right in front of you", -90.093109, 29.929470, '1725 Delachaise St.', 'New Orleans', 'LA', '70115', 'Come at me bro \n and to you I will show \n riches that will make you king of the town \n lest fate bury you in the ground', '1', '2', (err, res) => {
 //   console.log(err, res);
 // });
 
@@ -70,7 +70,7 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.updateRiddleViews('acreed1998', '1', (err, res) => {
+// db.updateRiddleViews('bake', '2', (err, res) => {
 //   console.log(err, res);
 // });
 
@@ -94,7 +94,7 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.insertUserInventoryRiddle('2', '1', (err, res) => {
+// db.insertUserInventoryRiddle('3', '2', (err, res) => {
 //   console.log(err, res);
 // });
 
@@ -106,7 +106,7 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.deleteTreasure(2, (err, res) => {
+// db.deleteTreasure(5, (err, res) => {
 //   console.log(err, res);
 // });
 
@@ -118,10 +118,18 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-// db.selectRiddlesByZipcode(70115, (err, res) => {
+// db.selectRiddlesByZipcode('cake', 70115, (err, res) => {
 //   console.log(err, res);
 // });
 
-// db.selectFilteredUsers(['sevrer'], (err, res) => {
+// db.selectTreasuresByZipcode('55', 70115, (err, res) => {
+//   console.log(err, res);
+// });
+
+// db.selectFilteredUsers(['server'], (err, res) => {
+//   console.log(err, res);
+// });
+
+// db.selectFilteredUserInfoByUsername('acreed1998', (err, res) => {
 //   console.log(err, res);
 // });
