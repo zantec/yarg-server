@@ -360,7 +360,7 @@ module.exports.insertTreasure = (gold_value, longitude, latitude, address, city,
                             } else {
                               const obj = treasure;
                               obj.location_data = locations[locations.length - 1];
-                              connection.query(`UPDATE Users SET treasures_claimed = ${user.treasures_placed + 1} WHERE id = ${user.id}`);
+                              connection.query(`UPDATE Users SET treasures_placed = ${user.treasures_placed + 1} WHERE id = ${user.id}`);
                               callback(null, obj);
                             }
                           });
