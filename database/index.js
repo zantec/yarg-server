@@ -690,7 +690,7 @@ module.exports.selectRiddlesByZipcode  = (username, zipcode, callback) => {
           callback(err2, riddles);
         } else {
           callback(null, _.filter(riddles, riddle => {
-            return riddle.location_data.zipcode === zipcode && riddle.id_user !== (!user ? undefined : user.id);
+            return riddle.location_data.zipcode === parseInt(zipcode) && riddle.id_user !== (!user ? undefined : user.id);
           }));
         }
       });

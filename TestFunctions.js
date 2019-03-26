@@ -90,9 +90,9 @@ const axios = require('axios').default;
 //   console.log(err, res);
 // });
 
-db.selectUserInventoryByUsername('acreed1998', (err, res) => {
-  console.log(err, res);
-});
+// db.selectUserInventoryByUsername('acreed1998', (err, res) => {
+//   console.log(err, res);
+// });
 
 // db.insertUserInventoryRiddle('3', '2', (err, res) => {
 //   console.log(err, res);
