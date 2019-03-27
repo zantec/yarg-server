@@ -320,6 +320,30 @@ module.exports.verifyUserPassword = (username, password, callback) => {
   });
 };
 
+module.exports.updateUserNumericStat = (username, stat, amount, callback) => {
+  module.exports.selectUserByUsername(username, (err, user) => {
+    if (err) {
+      callback(err, null);
+    } else if (!user) {
+      callback(Error('USER DOES NOT EXIST'), null);
+    } else {
+      connection.query(`UPDATE Users SET ${stat} = ${user[stat] + parseInt(amount)} WHERE id = ${user.id}`, (err2) => {
+        if (err2) {
+          callback(err2, null);
+        } else {
+          module.exports.selectFilteredUserInfoByUsername(user.username, (err3, updatedUser) => {
+            if (err3) {
+              callback(err3, null);
+            } else {
+              callback(null, updatedUser);
+            }
+          });
+        }
+      });
+    }
+  });
+};
+
 // END OF USER RELATIVE HELPER FUNCTIONS //
 
 // TREASURE RELATIVE HELPER FUNCIONS //
