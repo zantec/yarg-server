@@ -203,6 +203,16 @@ app.post('/user/inventory', (req, res) => {
   }
 });
 
+app.patch('/user/stats', (req, res) => {
+  db.updateUserNumericStat(req.body.username, req.body.stat, req.body.amount, (err, user) => {
+    if (err) {
+      res.send(500, 'UNABLE TO UPDATE USER STAT');
+    } else {
+      res.send(202, user);
+    }
+  });
+});
+
 app.get('/riddles/city', (req, res) => {
   db.selectRiddlesByCity(req.query.city, (err, riddles) => {
     if (err) {
@@ -277,19 +287,21 @@ app.patch('/treasure/gold', (req, res) => {
 
 app.get('/leaderboard/:sortBy', (req, res) => {
   if (req.params.sortBy) {
-    db.selectAllUsers((err, users) => {
+    db.selectFilteredUsers(['server'], (err, users) => {
       if (err) {
         console.log(err);
       } else {
         const topTen = users.sort((left, right) => {
           return right[req.params.sortBy] - left[req.params.sortBy];
         }).slice(0, 10).map((user) => {
-          return {
-            username: user.username,
-            gold: user.gold,
-            treasures_placed: user.treasures_placed,
-            avatar: user.avatar,
-          };
+          const userObj = {};
+          const filterOut = ['password', 'salt'];
+          _.forEach(user, (value, key) => {
+            if (!_.includes(filterOut, key)) {
+              userObj[key] = value;
+            }
+          });
+          return userObj;
         });
         res.status(200).send(topTen);
       }
