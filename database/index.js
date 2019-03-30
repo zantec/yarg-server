@@ -639,30 +639,38 @@ module.exports.deleteTreasure = (id_treasure, callback) => {
 // RIDDLE RELATIVE HELPER FUNCTIONS //
 
 module.exports.insertRiddle = (title, latitude, longitude, address, city, state, zipcode, riddle, id_treasure, id_user, callback) => {
-  module.exports.selectUserById(parseInt(id_user), (err, user) => {
+  connection.query(`SELECT * FROM Riddles WHERE id_treasure = ${parseInt(id_treasure)}`, (err, riddleArray) => {
     if (err) {
       callback(err, null);
+    } else if (riddleArray.length > 0) {
+      callback(Error('Treasure Already Has Riddle Attached To It'));
     } else {
-      module.exports.selectRiddlesByUsername(user.username, (err2, riddles) => {
-        if (err2) {
-          callback(err2, null);
-        } else if (riddles.length > 4 && user.id !== 1) {
-          callback(Error('USER ALREADY HAS 5 RIDDLES'), null);
+      module.exports.selectUserById(parseInt(id_user), (err, user) => {
+        if (err) {
+          callback(err, null);
         } else {
-          module.exports.insertLocation('riddle', parseFloat(longitude), parseFloat(latitude), address, city, state, zipcode, (err3, location) => {
-            if (err3) {
-              callback(err3, null);
+          module.exports.selectRiddlesByUsername(user.username, (err2, riddles) => {
+            if (err2) {
+              callback(err2, null);
+            } else if (riddles.length > 4 && user.id !== 1) {
+              callback(Error('USER ALREADY HAS 5 RIDDLES'), null);
             } else {
-              const q = [title, riddle, parseInt(id_treasure), location.id, parseInt(id_user)];
-              connection.query('INSERT INTO Riddles (title, riddle, id_treasure, id_location, id_user) VALUES (?, ?, ?, ?, ?)', q, (err4) => {
-                if (err4) {
-                  callback(err4, null); 
+              module.exports.insertLocation('riddle', parseFloat(longitude), parseFloat(latitude), address, city, state, zipcode, (err3, location) => {
+                if (err3) {
+                  callback(err3, null);
                 } else {
-                  module.exports.selectRiddlesByUsername(user.username, (err5, updateRiddles) => {
-                    if (err5) {
-                      callback(err5, null);
+                  const q = [title, riddle, parseInt(id_treasure), location.id, parseInt(id_user)];
+                  connection.query('INSERT INTO Riddles (title, riddle, id_treasure, id_location, id_user) VALUES (?, ?, ?, ?, ?)', q, (err4) => {
+                    if (err4) {
+                      callback(err4, null);
                     } else {
-                      callback(null, updateRiddles[updateRiddles.length - 1]);
+                      module.exports.selectRiddlesByUsername(user.username, (err5, updateRiddles) => {
+                        if (err5) {
+                          callback(err5, null);
+                        } else {
+                          callback(null, updateRiddles[updateRiddles.length - 1]);
+                        }
+                      });
                     }
                   });
                 }
