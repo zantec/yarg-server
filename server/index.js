@@ -164,11 +164,23 @@ app.post('/user/treasures', (req, res) => {
 app.delete('/user/treasure', (req, res) => {
   db.deleteTreasure(req.query.id_treasure, (err, treasures) => {
     if (err) {
-      res.status(500).send('UNABLE TO DELETE TREASURE');
+      res.send(500, 'UNABLE TO DELETE TREASURE');
     } else {
-      res.status(202).send(treasures);
+      res.send(200, treasures);
     }
   });
+});
+
+app.delete('/treasure', (req, res) => {
+  setTimeout(() => {
+    db.deleteTreasure(req.query.id_treasure, (err, treasures) => {
+    if (err) {
+      console.log(treasures);
+    } else {
+      console.log(err);
+    }
+  })}, 120000);
+  res.send(200, 'DELETING TREASURE IN 60 SECONDS');
 });
 
 app.get('/user/inventory', (req, res) => {
