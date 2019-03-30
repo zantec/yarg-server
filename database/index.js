@@ -556,6 +556,23 @@ module.exports.updateTreasureGold = (id_treasure, gold_value, callback) => {
   });
 };
 
+module.exports.selectNoRiddleTreasuresByUsername = (username, callback) => {
+  module.exports.selectTreasuresByUsername(username, (err, treasures) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      module.exports.selectRiddlesByUsername(username, (err2, riddles) => {
+        if (err2) {
+          callback(err2, null); 
+        } else {
+          const treasuresToExclude = _.map(riddles, riddle => riddle.id_treasure);
+          callback(null, _.filter(treasures, treasure => !_.includes(treasuresToExclude, treasure.id)));
+        }
+      });
+    }
+  });
+};
+
 module.exports.deleteTreasure = (id_treasure, callback) => {
   module.exports.selectTreasureById(parseInt(id_treasure), (err, treasure) => {
     if (err) {

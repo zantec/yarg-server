@@ -133,3 +133,7 @@ const axios = require('axios').default;
 // db.selectFilteredUserInfoByUsername('acreed1998', (err, res) => {
 //   console.log(err, res);
 // });
+
+// db.selectNoRiddleTreasuresByUsername('ryan', (err, res) => {
+//   console.log(err, res);
+// });

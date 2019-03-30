@@ -151,6 +151,16 @@ app.get('/user/treasures', (req, res) => {
   });
 });
 
+app.get('/user/noriddletreasures', (req, res) => {
+  db.selectNoRiddleTreasuresByUsername(req.query.username, (err, treasures) => {
+    if (err) {
+      res.status(500).send('UNABLE TO RETRIEVE USER TREASURES WITHOUT RIDDLES');
+    } else {
+      res.send(200, treasures);
+    }
+  });
+});
+
 app.post('/user/treasures', (req, res) => {
   db.insertTreasure(req.body.gold_value, req.body.longitude, req.body.latitude, req.body.address, req.body.city, req.body.state, req.body.zipcode, req.body.id_user, (err, treasure) => {
     if (err) {
